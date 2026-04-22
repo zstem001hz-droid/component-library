@@ -1,4 +1,5 @@
-// Alert Box types
+import React from 'react';
+
 export type AlertType = 'success' | 'error' | 'warning' | 'info';
 
 export interface AlertBoxProps {
@@ -8,7 +9,6 @@ export interface AlertBoxProps {
   children?: React.ReactNode;
 }
 
-// User Profile Card types
 export interface User {
   id: string;
   name: string;
@@ -25,7 +25,6 @@ export interface UserProfileCardProps {
   children?: React.ReactNode;
 }
 
-// Product Display types
 export interface Product {
   id: string;
   name: string;
