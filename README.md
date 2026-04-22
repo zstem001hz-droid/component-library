@@ -1,73 +1,87 @@
-# React + TypeScript + Vite
+# Component Library - Components and Props
+**Author:** Zac White
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
+A reusable React component library built with TypeScript and Tailwind CSS. 
+This library demonstrates component-based architecture, TypeScript interfaces, 
+prop handling, and component composition.
 
-Currently, two official plugins are available:
+## Tech Stack
+- [React 19](https://react.dev/) — UI library
+- [TypeScript](https://www.typescriptlang.org/) — Type safety
+- [Vite 8](https://vitejs.dev/) — Build tool and dev server
+- [Tailwind CSS v4](https://tailwindcss.com/) — Utility-first styling
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Components
 
-## React Compiler
+### AlertBox
+Displays styled alert messages. Supports `success`, `error`, `warning`, and `info` types. 
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+**Example:**
+```tsx
+<AlertBox
+  type="success"
+  message="Profile updated successfully!"
+  onClose={() => setShowAlert(false)}
+>
+  <p>You can now continue using the application.</p>
+</AlertBox>
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### UserProfileCard
+Displays user profile information. Configurable email, role, avatar, and edit handler.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+**Example:**
+```tsx
+<UserProfileCard
+  user={user}
+  showEmail={true}
+  showRole={true}
+  onEdit={(userId) => console.log('Editing:', userId)}
+>
+  <p>Last login: 2 hours ago</p>
+</UserProfileCard>
 ```
+
+### ProductDisplay
+Displays product information. Configurable description, stock status, and cart handler. 
+
+**Example:**
+```tsx
+<ProductDisplay
+  product={product}
+  showDescription={true}
+  showStockStatus={true}
+  onAddToCart={(id) => console.log('Added:', id)}
+>
+  <p>Free shipping available</p>
+</ProductDisplay>
+```
+
+## Getting Started
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## References
+- [React Documentation](https://react.dev/)
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
+- [Tailwind CSS v4 Documentation](https://tailwindcss.com/docs)
+- [Vite Documentation](https://vitejs.dev/guide/)
+
+## Reflections
+
+Optional props were marked with `?` in the TypeScript interfaces and given default values where appropriate (e.g. `showEmail = true`). Components conditionally render elements using `&&` when optional handlers like `onClose` or `onEdit` are not provided. 
+
+Each interface was designed around what the component strictly needs to function vs. what's configurable. Required props have no `?`, optional props do. Union types like `'success' | 'error' | 'warning' | 'info'` constrain values to only what's valid.
+
+All components use TypeScript interfaces for props. The `import type` syntax was required due to `verbatimModuleSyntax` being enabled in `tsconfig.json`. TypeScript caught errors at compile time rather than runtime. 
+
+Wiring all three components together in `App.tsx` required managing shared state with `useState` and passing callbacks correctly between parent and child components. The `children` prop pattern was key for flexible layouts. 
